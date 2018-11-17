@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>RPL04 Convoluci&oacute;n y correlaci&oacute;n de se&ntilde;ales en tiempo continuo.</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-16"><meta name="DC.source" content="Part1PR04.m"><style type="text/css">
+      --><title>RPL04 Convoluci&oacute;n y correlaci&oacute;n de se&ntilde;ales en tiempo continuo.</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-16"><meta name="DC.source" content="ASySPrac4EricCaudillo.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,7 +66,12 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>RPL04 Convoluci&oacute;n y correlaci&oacute;n de se&ntilde;ales en tiempo continuo.</h1><!--introduction--><p>Caudillo Barbosa Eric Olea Garc&iacute;a Bryan Dar&iacute;o</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Introducci&oacute;n.</a></li><li><a href="#2">Resoluci&oacute;n del PR04.</a></li><li><a href="#12">Resoluci&oacute;n del PR05.</a></li><li><a href="#21">Convoluci&oacute;n discreta Lathi 3.1.1</a></li><li><a href="#23">Correlaci&oacute;n discreta Lathi 3.1.1</a></li><li><a href="#28">Convoluci&oacute;n con CONV de Matlab.</a></li></ul></div><h2>Introducci&oacute;n.<a name="1"></a></h2><p>DESCRIPTIVE TEXT</p><h2>Resoluci&oacute;n del PR04.<a name="2"></a></h2><p>A continuaci&oacute;n se analiza el problema 1. del PR04. Se realiza la convoluci&oacute;n de la se&ntilde;al:</p><p><img vspace="5" hspace="5" src="ft.PNG" alt=""> </p><pre>con la se&ntilde;al:</pre><p><img vspace="5" hspace="5" src="gt.PNG" alt=""> </p><pre>Se muestra la gr&aacute;fica de la convoluci&oacute;n num&eacute;rica con la funci&oacute;n
+  </style></head><body><div class="content"><h1>RPL04 Convoluci&oacute;n y correlaci&oacute;n de se&ntilde;ales en tiempo continuo.</h1><!--introduction--><p>Caudillo Barbosa Eric.</p><p>Olea Garc&iacute;a Bryan.</p><p>Robles Mart&iacute;nez Dar&iacute;o Antonio.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">INTRODUCCI&Oacute;N</a></li><li><a href="#3">Resoluci&oacute;n del PR04.</a></li><li><a href="#13">Resoluci&oacute;n del PR05.</a></li><li><a href="#22">Convoluci&oacute;n discreta Lathi 3.1.1</a></li><li><a href="#24">Correlaci&oacute;n discreta Lathi 3.1.1</a></li><li><a href="#29">Convoluci&oacute;n con CONV de Matlab.</a></li></ul></div><h2>INTRODUCCI&Oacute;N<a name="1"></a></h2><p><b>Metodos numericos</b></p><p><b>1.-Integraci&oacute;n:</b> La integral definida de una funci&oacute;n continua f : [a, b] C R 7-&gt; R en el intervalo [a, b],es el &aacute;rea de la regi&oacute;n del plano delimitada por la gr&aacute;fica de la funci&oacute;n, el eje de abscisas y las rectas verticales x = a y x = b</p><p>Ejemplo: f(x)=e^-x^2</p><pre class="codeinput">syms <span class="string">x</span>;
+f=exp((-x)^2);
+a=-1;
+b=1;
+F=int(f,x,a,b);
+</pre><p><b>2.-Newton-Cotes</b></p><p>Son los tipos de integraci&oacute;n num&eacute;rica m&aacute;s comunes. Se basan en la estrategia de reemplazar una funci&oacute;n complicada o datos tabulados por un polinomio de aproximaci&oacute;n que es f&aacute;cil de integrar ,donde fn(x) es un polinomio de la forma</p><div><ul><li>fn(x)=a0+a1*x+a2*x^2+...+an-1*x^n-1+an*x^n</li></ul></div><p>donde n es el grado del polinomio</p><p><b>2.1.-Regla del trapecio</b></p><p>La regla del trapecio es la primera de las f&oacute;rmulas cerradas de Newton - Cotes. Corresponde al caso donde el polinomio de aproximaci&oacute;n es de primer grado .Geom&eacute;tricamente, la regla del trapecio consiste en aproximar el &aacute;rea debajo de la curva definida por f(x), por el &aacute;rea bajo la recta que une los puntos (a, f(a)) y (b, f(b)).</p><div><ul><li><b>int(f,x,a,b)=(h/2)[f(x0)f(x)]-(h^3/12)f''(E)      x0&lt;E&lt;x1</b></li></ul></div><p><b>Ejemplo</b></p><p><img src="ASySPrac4EricCaudillo_eq13843671088456577686.png" alt="$f(x)=exp^(-x^2)dx=2/2[exp(^-1)+exp(^-1)]-2/12[-2*exp(-E^2)(1-2E^2)]$"></p><p><img src="ASySPrac4EricCaudillo_eq16189289825065774935.png" alt="$=.7357+4/3 exp(^-3^2)(1-2E^2)$"></p><p><b>2.2.- Regla de simpson</b></p><p>En lugar de utilizar trapecios a partir de dos puntos mejor&oacute; la aproximaci&oacute;n utilizando par&aacute;bolas que pasen por tres puntos por los cuales pasa la funci&oacute;n. Elegimos 3 puntos: A(x_1, f(x_1)), B(x_2, f(x_2)) y C(x_3, f(x_3)). Con estos tres puntos vamos a calcular la par&aacute;bola que pasa por ah&iacute;. Es decir, tenemos que determinar los par&aacute;metros a,b,c tales que y = ax^2 + b\,x + c pasa por los puntos A,B,C.</p><p><img src="ASySPrac4EricCaudillo_eq13312497238089274938.png" alt="$integral(f,x,x0,x2)=h/3[f(x0)+4f(x1)+f(x2)]-(h^5)/90 f^(4)(E)$"></p><p><b>Ejemplo</b></p><p>$f(x)=exp^(-x^2)dx=1/3[exp(-1)+4exp(0)+exp(-1)]-1/90[-4exp(-E^2)(-4E^4+12E^2-3)] $</p><p><img src="ASySPrac4EricCaudillo_eq12044473289847810099.png" alt="$x0<E<x2$"></p><p><img src="ASySPrac4EricCaudillo_eq02464038433218670091.png" alt="$1.5785+2/45exp(-E^2)(-4E^4+12E^2-3)$"></p><p><img src="ASySPrac4EricCaudillo_eq04061614961404822374.png" alt="$-1<E<1$"></p><p><b>2.3.- Regla de 3/8 de Simpson</b></p><p>La regla de integraci&oacute;n de Simpson 3/8 para la &#8220;integraci&oacute;n cerrada&#8221; es decir, para cuando los valores de la funci&oacute;n en los extremos de los l&iacute;mites de integraci&oacute;n son conocidos.</p><p>Adem&aacute;s de aplicar la regla trapezoidal con segmentaci&oacute;n mas fina, otra forma de obtener una estimaci&oacute;n mas exacta de una integral es con el uso de polinomios de orden superior para conectar los puntos (en lugar de utilizar l&iacute;neas para conectarlos).</p><p>El m&eacute;todo de Integraci&oacute;n Simpson 3/8 consiste en tomar el &aacute;rea bajo una ecuaci&oacute;n c&uacute;bica que conecta cuatro puntos</p><p><img src="ASySPrac4EricCaudillo_eq01696071419864126132.png" alt="$f(x)=exp^(-x^2)dx=3/8(2/3)[exp(-1)+3exp(-1/4)+3exp(-1/4)+exp(-1)]-3/80(2/3)^5[-4exp(-E^2)(-4E^4+12E^2-3)]$"></p><p><img src="ASySPrac4EricCaudillo_eq01870522555150941551.png" alt="$x0<E<x3$"></p><p><img src="ASySPrac4EricCaudillo_eq14794720656161324530.png" alt="$1.5261+8/405(exp(-E^2))*(-4*E^4+12*E^2-3)$"></p><p><img src="ASySPrac4EricCaudillo_eq04061614961404822374.png" alt="$-1<E<1$"></p><p><b>2.4.- Regla del trapecio compueta</b></p><div><ul><li>Forma de aproximar una integral definida utilizando n trapecios.En la formulaci&oacute;n de este metodo se supone que f es continua y positiva en el intervalo [a,b] en n subintervalos ,cada uno de ancho x=(b-a)/n.</li></ul></div><p><b>2.5.-Regla de Simpson compuesta</b></p><div><ul><li>El intervalo de integraci&oacute;n [a,b] se divide en un n&uacute;mero par,n,de subintervalos.Tenemos entonces:</li></ul></div><p><img src="ASySPrac4EricCaudillo_eq10183397851541117166.png" alt="$ai=a+ih   (0<=i<=n)$"></p><p>donde <img src="ASySPrac4EricCaudillo_eq06871140417008991635.png" alt="$h = (b-a)/n$"></p><p><b>2.6.-Cuadratura Gaussiana</b></p><p>El objetivo de la cuadratura de Gauss - Legendre es determinar las abscisas x1 y x2 y dos coeficientes w1 y w2 <img src="ASySPrac4EricCaudillo_eq02235837233068948734.png" alt="$I=integral(f,x,-1,1)=w1*f(x1)+w2*f(x2)$"></p><p>sea exacta para polinomios c&uacute;bicos de la forma f(x) = a3x3 + a2x2 + a1x +a0. Como hay que determinar cuatro n&uacute;meros w1, w2, x1 y x2 en la expresi&oacute;n anterior, se deben seleccionar cuatro condiciones que deben cumplirse. Usando el hecho de que la integraci&oacute;n es aditiva, ser&aacute; suficiente con exigir que la integral anterior sea exacta para las cuatro funciones f(x) = 1, x, x2, x3</p><p><img src="ASySPrac4EricCaudillo_eq02238337603524717430.png" alt="$f(x)=exp^(-x^2)dx$"></p><p><img src="ASySPrac4EricCaudillo_eq04074647740223277089.png" alt="$=exp(-.57735026692)^2+exp(-.57735026692) [n=2]$"></p><p><img src="ASySPrac4EricCaudillo_eq13753399856257077687.png" alt="$=1,4331$"> <img src="ASySPrac4EricCaudillo_eq12663941426286717006.png" alt="$=.5555555556exp(-.774596692)^2+.88888889+exp(-.57735026692)+.5555555556exp(-.774596692)^2 [n=3]$"></p><p><img src="ASySPrac4EricCaudillo_eq00985658779109180283.png" alt="$1.4986$"></p><h2>Resoluci&oacute;n del PR04.<a name="3"></a></h2><p>A continuaci&oacute;n se analiza el problema 1. del PR04. Se realiza la convoluci&oacute;n de la se&ntilde;al:</p><p><img vspace="5" hspace="5" src="ft.png" alt=""> </p><pre>con la se&ntilde;al:</pre><p><img vspace="5" hspace="5" src="gt.png" alt=""> </p><pre>Se muestra la gr&aacute;fica de la convoluci&oacute;n num&eacute;rica con la funci&oacute;n
 "convconm", se modific&oacute; con el fin de poder modificar los l&iacute;mites, los
 intervalos de integraci&oacute;n y agregar una funci&oacute;n para el resultado
 anal&iacute;tico.</pre><pre>El resultado num&eacute;rico se muestra con un color negro y el resultado
@@ -86,10 +91,10 @@ res04 = @(t) 0.*(t&lt;-1 &amp; t&gt;2) + (2*exp(-t-1) + t -1).*(t&gt;=-1 &amp; t
     ((2-t)*exp(-1) + t -1).*(t&gt;=0 &amp; t&lt;1) + ((2-t)*exp(-1)).*(t&gt;=1 &amp; t&lt;=2);
 
 convconm(g,f,res04,tau,dtau,tvec,lims);
-</pre><img vspace="5" hspace="5" src="Part1PR04_01.png" alt=""> <p><img vspace="5" hspace="5" src="yt.PNG" alt=""> </p><pre>Para poder notar las diferencias entre el resultado num&eacute;rico y
-anal&iacute;tico, se realiza un aumento en la secci&oacute;n marcada.</pre><p><img vspace="5" hspace="5" src="am1pr04.PNG" alt=""> </p><p><img vspace="5" hspace="5" src="am2pr04.PNG" alt=""> </p><h2>Resoluci&oacute;n del PR05.<a name="12"></a></h2><p>A continuaci&oacute;n se analiza el problema e) del PR05. Se realiza la autocorrelaci&oacute;n de la se&ntilde;al:</p><p><img vspace="5" hspace="5" src="x1t.PNG" alt=""> </p><pre>Conocemos la propiedad de la convoluci&oacute;n para resolver correlaciones,
+</pre><img vspace="5" hspace="5" src="ASySPrac4EricCaudillo_01.png" alt=""> <p><img vspace="5" hspace="5" src="yt.png" alt=""> </p><pre>Para poder notar las diferencias entre el resultado num&eacute;rico y
+anal&iacute;tico, se realiza un aumento en la secci&oacute;n marcada.</pre><p><img vspace="5" hspace="5" src="am1pr04.png" alt=""> </p><p><img vspace="5" hspace="5" src="am2pr04.png" alt=""> </p><h2>Resoluci&oacute;n del PR05.<a name="13"></a></h2><p>A continuaci&oacute;n se analiza el problema e) del PR05. Se realiza la autocorrelaci&oacute;n de la se&ntilde;al:</p><p><img vspace="5" hspace="5" src="x1t.png" alt=""> </p><pre>Conocemos la propiedad de la convoluci&oacute;n para resolver correlaciones,
 y tenemos una funci&oacute;n que nos ayuda a resolver convoluciones, as&iacute; que
-podemos resolver el problema por la siguente ecuaci&oacute;n:</pre><p><img vspace="5" hspace="5" src="rx1t.PNG" alt=""> </p><pre>El resultado num&eacute;rico se muestra con un color negro y el resultado
+podemos resolver el problema por la siguente ecuaci&oacute;n:</pre><p><img vspace="5" hspace="5" src="rx1t.png" alt=""> </p><pre>El resultado num&eacute;rico se muestra con un color negro y el resultado
 anal&iacute;tico se muestra de un color rojo.</pre><pre class="codeinput">x1 = @(t) 0.*(t&lt;0) + 1.*(t&gt;=0) - 2.*(t&gt;=3) + 1.*(t&gt;=4);
 x11 = @(t) 0.*(t&lt;0) - 1.*(t&gt;=0) + 2.*(t&gt;=-3) - 1.*(t&gt;=-4);
 
@@ -102,11 +107,11 @@ res05 = @(t) 0.*(t&lt;-4 &amp; t&gt;4) + (-t-4).*(t&gt;=-4 &amp; t&lt;=-3) + (t+
     + (3*t + 4).*(t&gt;-1 &amp; t&lt;=0) + (-3*t + 4).*(t&gt;0 &amp; t&lt;=1) + (-t + 2).*(t&gt;1 &amp; t&lt;=3)<span class="keyword">...</span>
     + (t-4).*(t&gt;3 &amp; t&lt;=4);
 
-figure;
+f2 = figure;
 
 convconm(x11,x1,res05,tau,dtau,tvec,lims);
-</pre><img vspace="5" hspace="5" src="Part1PR04_02.png" alt=""> <p><img vspace="5" hspace="5" src="rx1x1.PNG" alt=""> </p><pre>Para poder notar las diferencias entre el resultado num&eacute;rico y
-anal&iacute;tico, se realiza un aumento en la secci&oacute;n marcada.</pre><p><img vspace="5" hspace="5" src="am1pr05.PNG" alt=""> </p><p><img vspace="5" hspace="5" src="am2pr05.PNG" alt=""> </p><h2>Convoluci&oacute;n discreta Lathi 3.1.1<a name="21"></a></h2><p>A continuaci&oacute;n se analiza el problema 3.1.1 Se realiza la convoluci&oacute;n de dos se&ntilde;ales discretas.</p><p><img vspace="5" hspace="5" src="eqd.PNG" alt=""> </p><pre class="codeinput">figure;
+</pre><img vspace="5" hspace="5" src="ASySPrac4EricCaudillo_02.png" alt=""> <p><img vspace="5" hspace="5" src="rx1x1.png" alt=""> </p><pre>Para poder notar las diferencias entre el resultado num&eacute;rico y
+anal&iacute;tico, se realiza un aumento en la secci&oacute;n marcada.</pre><p><img vspace="5" hspace="5" src="am1pr05.png" alt=""> </p><p><img vspace="5" hspace="5" src="am2pr05.png" alt=""> </p><h2>Convoluci&oacute;n discreta Lathi 3.1.1<a name="22"></a></h2><p>A continuaci&oacute;n se analiza el problema 3.1.1 Se realiza la convoluci&oacute;n de dos se&ntilde;ales discretas.</p><p><img vspace="5" hspace="5" src="eqd.png" alt=""> </p><pre class="codeinput"><span class="comment">%f3 = figure;</span>
 
 n1 = -3:3;
 x1 = [-9 -6 -3 0 3 6 9];
@@ -115,9 +120,9 @@ n2 = -2:2;
 x2 = [4 2 0 2 4];
 
 convdisc([n1;x1],[n2;x2]);
-</pre><img vspace="5" hspace="5" src="Part1PR04_03.png" alt=""> <img vspace="5" hspace="5" src="Part1PR04_04.png" alt=""> <h2>Correlaci&oacute;n discreta Lathi 3.1.1<a name="23"></a></h2><p>A continuaci&oacute;n se analiza el problema 3.1.1 Se realiza la correlaci&oacute;n de dos se&ntilde;ales discretas.</p><p><img vspace="5" hspace="5" src="eqd.PNG" alt=""> </p><pre>Conocemos la propiedad de la convoluci&oacute;n discreta para resolver correlaciones,
+</pre><img vspace="5" hspace="5" src="ASySPrac4EricCaudillo_03.png" alt=""> <h2>Correlaci&oacute;n discreta Lathi 3.1.1<a name="24"></a></h2><p>A continuaci&oacute;n se analiza el problema 3.1.1 Se realiza la correlaci&oacute;n de dos se&ntilde;ales discretas.</p><p><img vspace="5" hspace="5" src="eqd.png" alt=""> </p><pre>Conocemos la propiedad de la convoluci&oacute;n discreta para resolver correlaciones,
 y tenemos una funci&oacute;n que nos ayuda a resolver convoluciones discretas, as&iacute; que
-podemos resolver el problema por la siguente ecuaci&oacute;n:</pre><p><img vspace="5" hspace="5" src="corrd.PNG" alt=""> </p><pre class="codeinput">figure
+podemos resolver el problema por la siguente ecuaci&oacute;n:</pre><p><img vspace="5" hspace="5" src="corrd.png" alt=""> </p><pre class="codeinput"><span class="comment">%f4 = figure;</span>
 
 n1 = -3:3;
 x1 = [-9 -6 -3 0 3 6 9];
@@ -126,11 +131,12 @@ n2 = -2:2;
 x2 = [4 2 0 2 4];
 
 convdisc([n1;x1],[n2;x2]);
-</pre><img vspace="5" hspace="5" src="Part1PR04_05.png" alt=""> <img vspace="5" hspace="5" src="Part1PR04_06.png" alt=""> <pre>Como podemos observar, la inversi&oacute;n de la se&ntilde;al x2[n] es la misma se&ntilde;al
-x2[n],por lo que, en este caso, el resultado es igual a la convoluci&oacute;n.</pre><h2>Convoluci&oacute;n con CONV de Matlab.<a name="28"></a></h2><p>A continuaci&oacute;n se analiza el problema 3.1.1 Se realiza la convoluci&oacute;n de dos se&ntilde;ales discretas con la funci&oacute;n "conv(f,g)".</p><p><img vspace="5" hspace="5" src="eqd.PNG" alt=""> </p><pre>La funci&oacute;n conv comienza a realizar la convoluci&oacute;n de la se&ntilde;ales tomando
+</pre><img vspace="5" hspace="5" src="ASySPrac4EricCaudillo_04.png" alt=""> <pre>Como podemos observar, la inversi&oacute;n de la se&ntilde;al x2[n] es la misma se&ntilde;al
+x2[n],por lo que, en este caso, el resultado es igual a la convoluci&oacute;n.</pre><h2>Convoluci&oacute;n con CONV de Matlab.<a name="29"></a></h2><p>A continuaci&oacute;n se analiza el problema 3.1.1 Se realiza la convoluci&oacute;n de dos se&ntilde;ales discretas con la funci&oacute;n "conv(f,g)".</p><p><img vspace="5" hspace="5" src="eqd.png" alt=""> </p><pre>La funci&oacute;n conv comienza a realizar la convoluci&oacute;n de la se&ntilde;ales tomando
 como su inicio un n=0, por lo que para compensar este cambio, hay que
-retrasar o adelantar el resultado utilizando la propiedad:</pre><p><img vspace="5" hspace="5" src="convp.PNG" alt=""> </p><pre>En este caso, x1 se atrasa 3 unidades y x2 2 unidades, por lo que el
-retraso total en la convoluci&oacute;n ser&iacute;a de 5 unidades.</pre><pre>El retraso total se aplica en el vector n que dar&aacute; sentido a la gr&aacute;fica.</pre><pre class="codeinput">figure;
+retrasar o adelantar el resultado utilizando la propiedad:</pre><p><img vspace="5" hspace="5" src="convp.png" alt=""> </p><pre>En este caso, x1 se atrasa 3 unidades y x2 2 unidades, por lo que el
+retraso total en la convoluci&oacute;n ser&iacute;a de 5 unidades.</pre><pre>El retraso total se aplica en el vector n que dar&aacute; sentido a la gr&aacute;fica.</pre><pre class="codeinput">f5 = figure;
+
 x1 = [-9 -6 -3 0 3 6 9];
 x2 = [4 2 0 2 4];
 
@@ -138,17 +144,122 @@ n = -5:5;
 
 y = conv(x1,x2);
 
-stem(n,y);
+stem(n,y,<span class="string">'LineWidth'</span>,2,<span class="string">'Color'</span>,[0.87058824300766 0.490196079015732 0]);
 grid <span class="string">on</span>;
-</pre><img vspace="5" hspace="5" src="Part1PR04_07.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+xlabel(<span class="string">'n'</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'FontSize'</span>,14);
+ylabel(<span class="string">'y[n]'</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'FontSize'</span>,14);
+</pre><img vspace="5" hspace="5" src="ASySPrac4EricCaudillo_05.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% RPL04 Convolución y correlación de señales en tiempo continuo.
-% Caudillo Barbosa Eric
-% Olea García Bryan
-% Darío
+% Caudillo Barbosa Eric.
+%
+% Olea García Bryan.
+%
+% Robles Martínez Darío Antonio.
 
-%% Introducción.
-% DESCRIPTIVE TEXT
+
+
+%% INTRODUCCIÓN
+% *Metodos numericos*
+%
+% *1.-Integración:*
+% La integral definida de una función continua f : [a, b] C R 7-> R en el
+% intervalo [a, b],es el área de la región del plano delimitada por la gráfica de la función, el eje de abscisas y las rectas
+% verticales x = a y x = b
+%
+% Ejemplo: f(x)=e^-x^2
+syms x;
+f=exp((-x)^2);
+a=-1;
+b=1;
+F=int(f,x,a,b);
+%%
+%
+% *2.-Newton-Cotes*
+%
+% Son los tipos de integración numérica más comunes. Se basan en la estrategia de reemplazar una función complicada o datos tabulados por un polinomio de aproximación que es fácil de integrar
+% ,donde fn(x) es un polinomio de la forma
+%
+% * fn(x)=a0+a1*x+a2*x^2+...+an-1*x^n-1+an*x^n
+%
+% donde n es el grado del polinomio
+%
+% *2.1.-Regla del trapecio*
+%
+% La regla del trapecio es la primera de las fórmulas cerradas de Newton - Cotes. Corresponde al caso donde el polinomio de aproximación es de primer grado
+% .Geométricamente, la regla del trapecio consiste en aproximar el área debajo de la curva definida por f(x), por el área bajo la recta que une los puntos (a, f(a)) y (b, f(b)).
+%
+% * *int(f,x,a,b)=(h/2)[f(x0)f(x)]-(h^3/12)f''(E)      x0<E<x1*
+%
+% *Ejemplo*
+%
+% $f(x)=exp^(-x^2)dx=2/2[exp(^-1)+exp(^-1)]-2/12[-2*exp(-E^2)(1-2E^2)]$
+%
+% $=.7357+4/3 exp(^-3^2)(1-2E^2)$
+% 
+% *2.2.- Regla de simpson*
+%
+% En lugar de utilizar trapecios a partir de dos puntos mejoró la aproximación utilizando parábolas que pasen por tres puntos por los cuales pasa la función.
+% Elegimos 3 puntos: A(x_1, f(x_1)), B(x_2, f(x_2)) y C(x_3, f(x_3)). Con estos tres puntos vamos a calcular la parábola que pasa por ahí. Es decir, tenemos que determinar los parámetros a,b,c tales que y = ax^2 + b\,x + c pasa por los puntos A,B,C.
+%
+% $integral(f,x,x0,x2)=h/3[f(x0)+4f(x1)+f(x2)]-(h^5)/90 f^(4)(E)$
+%
+% *Ejemplo*
+%
+% $f(x)=exp^(-x^2)dx=1/3[exp(-1)+4exp(0)+exp(-1)]-1/90[-4exp(-E^2)(-4E^4+12E^2-3)] $
+%
+% $x0<E<x2$
+%
+% $1.5785+2/45exp(-E^2)(-4E^4+12E^2-3)$ 
+%
+% $-1<E<1$
+%
+% *2.3.- Regla de 3/8 de Simpson*
+%
+% La regla de integración de Simpson 3/8 para la “integración cerrada” es decir, para cuando los valores de la función en los extremos de los límites de integración son conocidos.
+%
+% Además de aplicar la regla trapezoidal con segmentación mas fina, otra forma de obtener una estimación mas exacta de una integral es con el uso de polinomios de orden superior para conectar los puntos (en lugar de utilizar líneas para conectarlos).
+%
+% El método de Integración Simpson 3/8 consiste en tomar el área bajo una ecuación cúbica que conecta cuatro puntos
+%
+% $f(x)=exp^(-x^2)dx=3/8(2/3)[exp(-1)+3exp(-1/4)+3exp(-1/4)+exp(-1)]-3/80(2/3)^5[-4exp(-E^2)(-4E^4+12E^2-3)]$
+%
+% $x0<E<x3$
+%
+% $1.5261+8/405(exp(-E^2))*(-4*E^4+12*E^2-3)$
+%
+% $-1<E<1$
+%
+% *2.4.- Regla del trapecio compueta*
+%
+% * Forma de aproximar una integral definida utilizando n trapecios.En la
+% formulación de este metodo se supone que f es continua y positiva en el
+% intervalo [a,b] en n subintervalos ,cada uno de ancho x=(b-a)/n.
+%
+% *2.5.-Regla de Simpson compuesta*
+% 
+% * El intervalo de integración [a,b] se divide en un número par,n,de
+% subintervalos.Tenemos entonces:
+%
+% $ai=a+ih   (0<=i<=n)$
+% 
+% donde $h = (b-a)/n$ 
+%
+% *2.6.-Cuadratura Gaussiana*
+%
+% El objetivo de la cuadratura de Gauss - Legendre es determinar las abscisas x1 y x2 y dos coeficientes w1 y w2 
+% $I=integral(f,x,-1,1)=w1*f(x1)+w2*f(x2)$
+%
+% sea exacta para polinomios cúbicos de la forma f(x) = a3x3 + a2x2 + a1x +a0. Como hay que determinar cuatro números w1, w2, x1 y x2 en la expresión anterior, se deben seleccionar cuatro condiciones que deben cumplirse. Usando el hecho de que la integración es aditiva, será suficiente con exigir que la integral anterior sea exacta para las cuatro funciones f(x) = 1, x, x2, x3
+%
+% $f(x)=exp^(-x^2)dx$
+%
+% $=exp(-.57735026692)^2+exp(-.57735026692) [n=2]$
+%
+% $=1,4331$
+% $=.5555555556exp(-.774596692)^2+.88888889+exp(-.57735026692)+.5555555556exp(-.774596692)^2 [n=3]$
+%
+% $1.4986$
 
 
 
@@ -157,7 +268,7 @@ grid <span class="string">on</span>;
 % Se realiza la convolución de la señal:
 %%
 % 
-% <<ft.PNG>>
+% <<ft.png>>
 % 
 %%
 % 
@@ -166,7 +277,7 @@ grid <span class="string">on</span>;
 % 
 %%
 % 
-% <<gt.PNG>>
+% <<gt.png>>
 % 
 %%
 % 
@@ -203,7 +314,7 @@ convconm(g,f,res04,tau,dtau,tvec,lims);
 
 %%
 % 
-% <<yt.PNG>>
+% <<yt.png>>
 % 
 
 %%
@@ -214,12 +325,12 @@ convconm(g,f,res04,tau,dtau,tvec,lims);
 
 %%
 % 
-% <<am1pr04.PNG>>
+% <<am1pr04.png>>
 % 
 
 %%
 % 
-% <<am2pr04.PNG>>
+% <<am2pr04.png>>
 % 
 
 
@@ -231,7 +342,7 @@ convconm(g,f,res04,tau,dtau,tvec,lims);
 
 %%
 % 
-% <<x1t.PNG>>
+% <<x1t.png>>
 % 
 
 %%
@@ -243,7 +354,7 @@ convconm(g,f,res04,tau,dtau,tvec,lims);
 
 %%
 % 
-% <<rx1t.PNG>>
+% <<rx1t.png>>
 % 
 
 %%
@@ -266,13 +377,13 @@ res05 = @(t) 0.*(t<-4 & t>4) + (-t-4).*(t>=-4 & t<=-3) + (t+2).*(t>-3 & t<=-1)..
     + (3*t + 4).*(t>-1 & t<=0) + (-3*t + 4).*(t>0 & t<=1) + (-t + 2).*(t>1 & t<=3)...
     + (t-4).*(t>3 & t<=4);
 
-figure;
+f2 = figure;
 
 convconm(x11,x1,res05,tau,dtau,tvec,lims);
 
 %%
 % 
-% <<rx1x1.PNG>>
+% <<rx1x1.png>>
 % 
 
 %%
@@ -283,12 +394,12 @@ convconm(x11,x1,res05,tau,dtau,tvec,lims);
 
 %%
 % 
-% <<am1pr05.PNG>>
+% <<am1pr05.png>>
 % 
 
 %%
 % 
-% <<am2pr05.PNG>>
+% <<am2pr05.png>>
 % 
 
 %% Convolución discreta Lathi 3.1.1
@@ -297,10 +408,10 @@ convconm(x11,x1,res05,tau,dtau,tvec,lims);
 
 %%
 % 
-% <<eqd.PNG>>
+% <<eqd.png>>
 % 
 
-figure;
+%f3 = figure;
 
 n1 = -3:3;
 x1 = [-9 -6 -3 0 3 6 9];
@@ -316,7 +427,7 @@ convdisc([n1;x1],[n2;x2]);
 
 %%
 % 
-% <<eqd.PNG>>
+% <<eqd.png>>
 % 
 
 %%
@@ -328,10 +439,10 @@ convdisc([n1;x1],[n2;x2]);
 
 %%
 % 
-% <<corrd.PNG>>
+% <<corrd.png>>
 % 
 
-figure
+%f4 = figure;
 
 n1 = -3:3;
 x1 = [-9 -6 -3 0 3 6 9];
@@ -353,7 +464,7 @@ convdisc([n1;x1],[n2;x2]);
 
 %%
 % 
-% <<eqd.PNG>>
+% <<eqd.png>>
 % 
 
 %%
@@ -364,7 +475,7 @@ convdisc([n1;x1],[n2;x2]);
 
 %%
 % 
-% <<convp.PNG>>
+% <<convp.png>>
 % 
 
 %%
@@ -377,7 +488,8 @@ convdisc([n1;x1],[n2;x2]);
 %  El retraso total se aplica en el vector n que dará sentido a la gráfica.
 % 
 
-figure;
+f5 = figure;
+
 x1 = [-9 -6 -3 0 3 6 9];
 x2 = [4 2 0 2 4];
 
@@ -385,8 +497,10 @@ n = -5:5;
 
 y = conv(x1,x2);
 
-stem(n,y);
+stem(n,y,'LineWidth',2,'Color',[0.87058824300766 0.490196079015732 0]);
 grid on;
+xlabel('n','FontWeight','bold','FontSize',14);
+ylabel('y[n]','FontWeight','bold','FontSize',14);
 
 ##### SOURCE END #####
 --></body></html>
